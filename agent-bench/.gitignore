@@ -1,7 +1,15 @@
+# venvs / local tooling
+.venvs/
 .venv/
+
+# python junk
 __pycache__/
 *.pyc
 .pytest_cache/
-.DS_Store
+
+# editor / OS
 .vscode/
-runlogs/
+.DS_Store
+
+# local artifacts
+*.log
