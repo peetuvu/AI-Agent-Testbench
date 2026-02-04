@@ -1,13 +1,63 @@
-# Snake (logic only)
+# Snake2 (logic only) — Benchmark Task
 
-Implement snake game logic in `snake/game.py`.
+Implement the Snake2 game logic in:
 
-Rules:
-- Snake is list of (x, y) tuples, head first.
-- step() moves the snake in action direction.
-- If head moves onto food: grow by 1, score +1, respawn food deterministically.
-- Wall collision: alive=False if head leaves bounds.
-- Self collision: alive=False if head hits body.
+- `agent-bench/snake/game.py`
 
-Food respawn must be deterministic:
-scan grid left-to-right, top-to-bottom, pick first empty cell.
+You must implement **exactly** these functions:
+
+- `init_state(...)`
+- `step(state, action)`
+
+Do not change the file structure. Do not add dependencies. Do not modify tests.  
+The evaluator will run both public sanity tests and separate hidden tests.
+
+---
+
+## Coordinate system and representation
+
+- The grid is `width × height`
+- Coordinates are `(x, y)`:
+  - `(0, 0)` is top-left
+  - `x` increases to the right
+  - `y` increases downward
+
+### Snake representation
+- `snake` is a list of `(x, y)` tuples, **head first**
+- Example: `[(2,2), (1,2), (0,2)]`
+
+### Direction / actions
+- Actions are strings: `"U"`, `"D"`, `"L"`, `"R"`
+- The state includes a current `"direction"`
+- **Instant reversal is forbidden**: if the action is opposite to current direction, ignore it and keep moving in the current direction.
+
+Opposites: `U↔D`, `L↔R`.
+
+---
+
+## State dictionary
+
+`init_state(...)` must return a **new dictionary** that contains at least these keys:
+
+- `"width"`: int
+- `"height"`: int
+- `"snake"`: list of `(x,y)` head-first
+- `"food"`: dict with **exact keys** `{"apple", "big"}`
+- `"direction"`: `"U"|"D"|"L"|"R"`
+- `"wrap"`: bool
+- `"obstacles"`: set of `(x,y)` blocked cells
+- `"alive"`: bool
+- `"score"`: int
+- `"steps"`: int
+- `"pending_growth"`: int (internal counter you may use)
+
+You may include additional keys if you want, but the above must exist.
+
+---
+
+## Food
+
+Food is a dict:
+
+```python
+food = {"apple": (x,y) or None, "big": (x,y) or None}
