@@ -3,8 +3,9 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 AGENT_DIR="$ROOT/agent-bench"
+TEST_DIR="$ROOT/eval/hidden_tests"
 
-# activate venv (adjust if you place it elsewhere)
+# Activate venv (adjust if yours differs)
 if [ -f "$ROOT/.venvs/agent-bench/bin/activate" ]; then
   # shellcheck disable=SC1090
   source "$ROOT/.venvs/agent-bench/bin/activate"
@@ -13,6 +14,8 @@ else
   exit 1
 fi
 
-export PYTHONPATH="$AGENT_DIR"
+# Ensure Python can import: snake (from agent-bench) and eval (from repo root)
+export PYTHONPATH="$AGENT_DIR:$ROOT"
 
-pytest -q "$ROOT/eval/hidden_tests" "$ROOT/eval/test_passk.py"
+# Run ONLY hidden tests and ignore any pytest.ini that might cause recursive collection
+pytest -q -c /dev/null "$TEST_DIR"
